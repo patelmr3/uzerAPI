@@ -1,0 +1,23 @@
+{
+  "name": "uzerapi",
+  "version": "1.0.0",
+  "description": "API for Uzer app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patelmr3/uzerAPI.git"
+  },
+  "author": "Maulik Patel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patelmr3/uzerAPI/issues"
+  },
+  "homepage": "https://github.com/patelmr3/uzerAPI#readme",
+  "devDependencies": {
+    "express": "^4.16.2"
+  }
+}
