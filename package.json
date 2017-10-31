@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/patelmr3/uzerAPI#readme",
   "devDependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mongodb": "^2.2.33"
   }
 }
