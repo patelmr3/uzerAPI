@@ -1,10 +1,11 @@
 let mongo = require('mongodb').MongoClient;
 
-console.log('calling connection');
-
 //connect to mongo database
-mongo.connect('mongodb://localhost:27017/uzers', (err, _db) => {
-  if(err) throw new Error(err);
-  console.log("Connected correctly to server");
-  exports.db = _db;
-});
+module.exports = function (req, res, next) {
+  mongo.connect('mongodb://localhost:27017/uzers', (err, db) => {
+    if(err) next(err);
+    console.log("Connected to database");
+    req.app.locals.db = db;
+    next();
+  })
+};
