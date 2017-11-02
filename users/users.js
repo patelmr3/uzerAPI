@@ -20,12 +20,11 @@ router.route('/')
   .get((req, res) => {
     db.collection('users').find().sort({firstName:1}).toArray( (err, results) => {
       res.json({results: results, status: 'success'});
-      db.close();
     }); 
+    db.close();
   })
-  .post((req, res) => {
+  .post((req, res, next) => {
     let objId = new ObjectId();
-    console.log(req.body);
     db.collection('users').insertOne({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -34,8 +33,22 @@ router.route('/')
       jobPosition: req.body.jobPosition,
       _id: objId
     }, (err, results) => {
-      res.send({status: 'success', id: objId});
+      if(err) {
+        if(err.code === 11000) {
+          res.send({
+            status: 'fail', 
+            message: 'User already registerd. Please use different email address'
+          });
+          console.log('Duplicate user');
+        } else { 
+          next(err) 
+        }
+      } else { 
+        res.send({status: 'success', id: objId});
+        console.log('New user registered');
+      }
     })
+    db.close();
   })
   .put((req, res, next) => {
     db.collection('users').updateOne(
@@ -46,6 +59,7 @@ router.route('/')
         console.log(results);
         res.send({status: 'success'});
     });
+    db.close();
   })
 
 router.route('/:userId')
@@ -54,8 +68,8 @@ router.route('/:userId')
     .findOne({_id: ObjectId(req.params.userId)}, (err, results) => {
       if(err) next(err);
       res.json({results: results, status: 'success'});
-      db.close();
     })
+    db.close();
   })
   
 
