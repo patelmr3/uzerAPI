@@ -25,6 +25,7 @@ router.route('/')
   })
   .post((req, res) => {
     let objId = new ObjectId();
+    console.log(req.body);
     db.collection('users').insertOne({
       firstName: req.body.firstName,
       lastName: req.body.lastName,

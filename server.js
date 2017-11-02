@@ -3,10 +3,16 @@ let users = require('./users/users'); //router-import: users
 
 let app = express();
 
-// parse application/x-www-form-urlencoded
+//parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-// parse application/json
+//parse application/json
 app.use(express.json());
+//set headers
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'content-type');
+  next();
+});
 
 //API welcome message
 app.get('/', (req, res) => {
