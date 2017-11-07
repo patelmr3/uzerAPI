@@ -1,28 +1,32 @@
 let router = require('express').Router();
 let ObjectId = require('mongodb').ObjectID;
 let conn = require('../conn');
+let colors = require('./colors');
 let db;
 
 //connect to database
 router.all('*', conn, (req, res, next) => {
   db = req.app.locals.db;
   next();
-})
+});
 
 router.param('userId', (req, res, next, userId) => {
   //length of id must be 24
   if(userId.length !== 24) {
     res.status(400).json({status: 'fail', message: 'invalid id'});
   } else next();
-})
+});
 
 router.route('/')
+  //get all users
   .get((req, res) => {
-    db.collection('users').find().sort({firstName:1}).toArray( (err, results) => {
-      res.json({results: results, status: 'success'});
+    console.log(req.session.usrId);
+    db.collection('users').find().sort({firstName:1}).toArray((err, results) => {
+      res.json({results: results, status: 'success', data: req.session.usrId});
     }); 
     db.close();
   })
+  //register new user
   .post((req, res, next) => {
     let objId = new ObjectId();
     db.collection('users').insertOne({
@@ -31,7 +35,8 @@ router.route('/')
       email: req.body.email,
       phone: req.body.phone,
       jobPosition: req.body.jobPosition,
-      _id: objId
+      _id: objId,
+      profileColor: colors.getRandom()
     }, (err, results) => {
       if(err) {
         if(err.code === 11000) {
@@ -50,6 +55,7 @@ router.route('/')
     })
     db.close();
   })
+  //update user
   .put((req, res, next) => {
     db.collection('users').updateOne(
       {_id: ObjectId(req.body._id)}, 
@@ -60,9 +66,10 @@ router.route('/')
         res.send({status: 'success'});
     });
     db.close();
-  })
+  });
 
 router.route('/:userId')
+  //get user profile
   .get((req, res, next) => {
     db.collection('users')
     .findOne({_id: ObjectId(req.params.userId)}, (err, results) => {
@@ -70,7 +77,7 @@ router.route('/:userId')
       res.json({results: results, status: 'success'});
     })
     db.close();
-  })
+  });
   
 
 module.exports = router;

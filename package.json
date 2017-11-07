@@ -18,7 +18,12 @@
   },
   "homepage": "https://github.com/patelmr3/uzerAPI#readme",
   "devDependencies": {
+    "connect-mongo": "^2.0.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "mongodb": "^2.2.33"
+  },
+  "dependencies": {
+    "express-session": "^1.15.6"
   }
 }
