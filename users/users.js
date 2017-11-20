@@ -2,6 +2,7 @@ let router = require('express').Router();
 let ObjectId = require('mongodb').ObjectID;
 let conn = require('../conn');
 let colors = require('./colors');
+let skills = require('./skills/skills');
 let db;
 
 //connect to database
@@ -77,6 +78,10 @@ router.route('/:userId')
     })
     db.close();
   });
+
+
+//router: skills
+router.use('/', skills);
   
 
 module.exports = router;

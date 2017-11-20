@@ -1,6 +1,5 @@
 let express = require('express');
 let users = require('./users/users');
-let skills = require('./skills/skills');
 let conn = require('./conn');
 
 let app = express();
@@ -35,9 +34,6 @@ app.get('/', (req, res) => {
 //router: users
 app.use('/users', users);
 
-//router: skills
-app.use('/skills', skills);
-
 //login
 app.post('/login', (req, res) => {
   db.collection('users')
@@ -60,7 +56,7 @@ app.post('/login', (req, res) => {
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send(err);
 });
 
 //app: start-server
