@@ -1,17 +1,10 @@
 let express = require('express');
-let session = require('express-session');
 let users = require('./users/users');
+let skills = require('./skills/skills');
 let conn = require('./conn');
 
 let app = express();
 let db;
-
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-}));
 
 //connect to database
 app.all('*', conn, (req, res, next) => {
@@ -42,16 +35,18 @@ app.get('/', (req, res) => {
 //router: users
 app.use('/users', users);
 
+//router: skills
+app.use('/skills', skills);
+
 //login
 app.post('/login', (req, res) => {
   db.collection('users')
     .findOne({
       firstName: req.body.firstName,
       email: req.body.email
-    }, {_id: 1, firstName: 1, lastName: 1, email: 1}, (err, results) => {
+    }, (err, results) => {
       if(err) next(err);
       if(results) {
-        req.session.usrId = '1';
         res.send({
           status: 'success', 
           message: 'login successful', 

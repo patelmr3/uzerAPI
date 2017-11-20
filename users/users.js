@@ -20,9 +20,8 @@ router.param('userId', (req, res, next, userId) => {
 router.route('/')
   //get all users
   .get((req, res) => {
-    console.log(req.session.usrId);
     db.collection('users').find().sort({firstName:1}).toArray((err, results) => {
-      res.json({results: results, status: 'success', data: req.session.usrId});
+      res.json({results: results, status: 'success'});
     }); 
     db.close();
   })
