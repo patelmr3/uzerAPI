@@ -6,7 +6,7 @@ let skills = require('./skills/skills');
 let db;
 
 //connect to database
-router.all('*', conn, (req, res, next) => {
+router.all('*', (req, res, next) => {
   db = req.app.locals.db;
   next();
 });
@@ -21,7 +21,8 @@ router.param('userId', (req, res, next, userId) => {
 router.route('/')
   //get all users
   .get((req, res) => {
-    db.collection('users').find().sort({firstName:1}).toArray((err, results) => {
+    db.collection('users').find().sort({firstName:1})
+    .toArray((err, results) => {
       res.json({results: results, status: 'success'});
     }); 
     db.close();
@@ -72,7 +73,8 @@ router.route('/:userId')
   //get user profile
   .get((req, res, next) => {
     db.collection('users')
-    .findOne({_id: ObjectId(req.params.userId)}, (err, results) => {
+    .findOne({_id: ObjectId(req.params.userId)}, 
+    (err, results) => {
       if(err) next(err);
       res.json({results: results, status: 'success'});
     })
